@@ -1,0 +1,15 @@
+{
+    "name": "your-name/wpforms-pdf-generator-allied",
+    "description": "Generates PDFs for WPForms submissions.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "you@example.com"
+        }
+    ],
+    "require": {
+        "mpdf/mpdf": "^8.0"
+    }
+}
