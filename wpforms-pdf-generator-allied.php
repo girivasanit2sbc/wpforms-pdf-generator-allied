@@ -7,6 +7,7 @@
  * Author: Girivasan
  */
 
+
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly.
 }
@@ -19,9 +20,14 @@ register_activation_hook( __FILE__, 'wpforms_pdf_allied_activate' );
 function wpforms_pdf_allied_activate() {
     $upload_dir = wp_upload_dir();
     $pdf_storage_path = $upload_dir['basedir'] . '/' . WPFORMS_PDF_ALLIED_UPLOAD_DIR_NAME;
-    $mpdf_temp_dir = $upload_dir['basedir'] . '/mpdf_temp';
-    if ( ! is_dir( $pdf_storage_path ) ) wp_mkdir_p( $pdf_storage_path );
-    if (!is_dir($mpdf_temp_dir)) wp_mkdir_p($mpdf_temp_dir);
+    $mpdf_temp_dir = $upload_dir['basedir'] . '/mpdf_temp'; // mPDF temporary directory
+
+    if ( ! is_dir( $pdf_storage_path ) ) {
+        wp_mkdir_p( $pdf_storage_path );
+    }
+    if (!is_dir($mpdf_temp_dir)) {
+        wp_mkdir_p($mpdf_temp_dir);
+    }
 }
 
 // Check if mPDF is available
@@ -30,7 +36,7 @@ if ( file_exists( WPFORMS_PDF_ALLIED_PLUGIN_DIR . 'vendor/autoload.php' ) ) {
 } else {
     add_action( 'admin_notices', function() {
         echo '<div class="notice notice-error"><p>';
-        echo '<strong>WPForms PDF Generator - Allied Modular:</strong> The mPDF library is missing. Please run <code>composer install</code> in the plugin directory.';
+        echo '<strong>WPForms PDF Generator - Allied Modular:</strong> The mPDF library is missing. Please run <code>composer install</code> in the plugin directory (<code>' . esc_html(WPFORMS_PDF_ALLIED_PLUGIN_DIR) . '</code>). The plugin will not function without it.';
         echo '</p></div>';
     });
     // if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) error_log("WPForms PDF Main: mPDF vendor/autoload.php NOT FOUND. Plugin disabled.");
@@ -45,11 +51,11 @@ require_once WPFORMS_PDF_ALLIED_PLUGIN_DIR . 'includes/class-wpforms-pdf-allied-
 if ( class_exists( 'WPForms_PDF_Allied_Generator' ) ) {
     WPForms_PDF_Allied_Generator::instance();
 } else {
-    // if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) error_log("WPForms PDF Main: CRITICAL - WPForms_PDF_Allied_Generator class not found.");
+    // if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) error_log("WPForms PDF Main: CRITICAL - WPForms_PDF_Allied_Generator class not found after include.");
 }
 
 if ( class_exists( 'WPForms_PDF_Allied_Admin' ) ) {
     WPForms_PDF_Allied_Admin::instance();
 } else {
-    // if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) error_log("WPForms PDF Main: CRITICAL - WPForms_PDF_Allied_Admin class not found.");
+    // if (defined('WP_DEBUG_LOG') && WP_DEBUG_LOG) error_log("WPForms PDF Main: CRITICAL - WPForms_PDF_Allied_Admin class not found after include.");
 }
